@@ -249,6 +249,9 @@ def require_login():
     if not is_logged_in():
         return redirect(url_for("login"))
 
+@app.route("/")
+def home():
+    return redirect(url_for("login"))
 
 @app.route("/", methods=["GET", "POST"])
 def login():
