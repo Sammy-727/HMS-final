@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<section class="hero-card"><div><p class="eyebrow">Today overview</p><h2>Welcome back, {{ current_user.username }} 👋</h2><p>Track occupancy, bookings, revenue, and inventory health from one clean screen.</p></div><a class="btn primary" href="{{ url_for('manage') }}#bookings">New Booking</a></section>
+<div class="stats-grid">
+  <div class="stat"><span>Total Rooms</span><strong>{{ stats.total_rooms }}</strong></div><div class="stat good"><span>Available</span><strong>{{ stats.available }}</strong></div><div class="stat warn"><span>Occupied</span><strong>{{ stats.occupied }}</strong></div><div class="stat"><span>Active Bookings</span><strong>{{ stats.active_bookings }}</strong></div><div class="stat"><span>Employees</span><strong>{{ stats.employees }}</strong></div><div class="stat money"><span>Revenue</span><strong>₹{{ '%.0f'|format(stats.revenue) }}</strong></div>
+</div>
+<div class="grid-2">
+  <section class="card"><div class="card-head"><h3>Recent Bookings</h3><a href="{{ url_for('manage') }}#bookings">View all</a></div><div class="table-wrap"><table><thead><tr><th>Guest</th><th>Room</th><th>Dates</th><th>Status</th></tr></thead><tbody>{% for b in recent_bookings %}<tr><td>{{ b.name }}</td><td>{{ b.room_no }} · {{ b.category }}</td><td>{{ b.checkin }} → {{ b.checkout }}</td><td><span class="badge {{ b.status|lower|replace(' ','-') }}">{{ b.status }}</span></td></tr>{% endfor %}</tbody></table></div></section>
+  <section class="card"><div class="card-head"><h3>Low Stock Alerts</h3><a href="{{ url_for('manage') }}#inventory">Inventory</a></div>{% if low_stock %}<div class="stock-list">{% for i in low_stock %}<div><strong>{{ i.item_name }}</strong><span>{{ i.quantity }} {{ i.unit }} left</span></div>{% endfor %}</div>{% else %}<p class="empty">All inventory levels look good.</p>{% endif %}</section>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or 'StayEase HMS' }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+{% if current_user.get('user_id') %}
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span>SE</span><div><b>StayEase</b><small>Hotel Management</small></div></a>
+    <nav class="nav">
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint=='dashboard' else '' }}">Dashboard</a>
+      <a href="{{ url_for('manage') }}" class="{{ 'active' if request.endpoint=='manage' else '' }}">Manage</a>
+      <a href="{{ url_for('operations') }}" class="{{ 'active' if request.endpoint=='operations' else '' }}">Operations</a>
+      {% if current_user.get('role') in ['Admin','Manager'] %}<a href="{{ url_for('admin') }}" class="{{ 'active' if request.endpoint=='admin' else '' }}">Admin</a>{% endif %}
+    </nav>
+    <div class="side-card"><small>Signed in as</small><strong>{{ current_user.username }}</strong><span>{{ current_user.role }}</span></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><p class="eyebrow">{{ current_user.role }} panel</p><h1>{% block page_title %}{% endblock %}</h1></div><a class="btn ghost" href="{{ url_for('logout') }}">Logout</a></header>
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="alerts">{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+{% else %}
+{% block auth %}{% endblock %}
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block page_title %}Admin{% endblock %}
+{% block content %}
+<div class="grid-2">
+  <section class="card" id="employees">
+    <div class="card-head"><h3>Employees</h3></div>
+    <form class="form-grid compact" method="post" action="{{ url_for('add_employee') }}">
+      <input name="name" placeholder="Name" required>
+      <input name="phone" placeholder="Phone">
+      <input name="email" placeholder="Email">
+      <input name="designation" placeholder="Designation">
+      <input name="salary" type="number" placeholder="Salary">
+      <select name="shift"><option>Morning</option><option>Evening</option><option>Night</option></select>
+      <select name="status"><option>Active</option><option>Inactive</option></select>
+      <button class="btn primary">Add Employee</button>
+    </form>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Role</th><th>Shift</th><th>Status</th><th>Change Status</th><th>Drop</th></tr></thead>
+        <tbody>
+          {% for e in employees %}
+          <tr>
+            <td>{{ e.name }}</td>
+            <td>{{ e.designation }}</td>
+            <td>{{ e.shift }}</td>
+            <td><span class="badge {{ e.status|lower }}">{{ e.status }}</span></td>
+            <td>
+              <form class="inline-form" method="post" action="{{ url_for('update_employee_status', employee_id=e.id) }}">
+                <select name="status">
+                  <option value="Active" {% if e.status == 'Active' %}selected{% endif %}>Active</option>
+                  <option value="Inactive" {% if e.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                </select>
+                <button class="btn small">Update</button>
+              </form>
+            </td>
+            <td>
+              <form method="post" action="{{ url_for('drop_employee', employee_id=e.id) }}" onsubmit="return confirm('Drop this employee permanently?');">
+                <button class="btn small danger">Drop</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" id="users">
+    <div class="card-head"><h3>System Users</h3></div>
+    <form class="form-grid compact" method="post" action="{{ url_for('add_user') }}">
+      <input name="username" placeholder="Username">
+      <input name="password" placeholder="Password">
+      <select name="role"><option>Admin</option><option>Manager</option><option>Receptionist</option></select>
+      <select name="status"><option>Active</option><option>Inactive</option></select>
+      <button class="btn primary">Create</button>
+    </form>
+    <div class="table-wrap"><table><thead><tr><th>User</th><th>Role</th><th>Status</th></tr></thead><tbody>{% for u in users %}<tr><td>{{ u.username }}</td><td>{{ u.role }}</td><td><span class="badge {{ u.status|lower }}">{{ u.status }}</span></td></tr>{% endfor %}</tbody></table></div>
+  </section>
+</div>
+{% endblock %}

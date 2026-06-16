@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block auth %}
+<section class="login-page">
+  <div class="login-hero"><p class="eyebrow">Hotel Management System</p><h1>Run your hotel from one elegant dashboard.</h1><p>Manage rooms, bookings, customers, service usage, billing, inventory, employees, and reports.</p></div>
+  <form class="login-card" method="post">
+    <div class="brand big"><span>SE</span><div><b>StayEase HMS</b><small>Secure staff login</small></div></div>
+    {% with messages = get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+    <label>Username<input name="username" required placeholder="admin"></label>
+    <label>Password<input name="password" type="password" required placeholder="admin123"></label>
+    <button class="btn primary full">Login</button>
+    <p class="hint">Demo: admin/admin123 · manager/manager123 · reception/rec123</p>
+  </form>
+</section>
+{% endblock %}
