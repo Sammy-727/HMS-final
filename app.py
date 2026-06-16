@@ -251,7 +251,9 @@ def require_login():
 
 @app.route("/")
 def home():
-    return redirect(url_for("login"))
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
+    return render_template("login.html")
 
 @app.route("/", methods=["GET", "POST"])
 def login():
